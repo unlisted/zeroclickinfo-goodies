@@ -8,7 +8,7 @@ use constant DICT_FILE => '/usr/share/dict/words';
 my %dict;
 sub create_dict {
     open my $fh, '<', DICT_FILE
-        or die "Could not open DICTFILE\n";
+        or return;
     while(<$fh>)
     {
         chomp;
@@ -26,9 +26,9 @@ sub create_dict {
     close $fh;
 
     # remove trivial cases
-#    foreach my $key (keys %dict) {
-#	delete $dict{$key} if (@{$dict{$key}} == 1);
- #   }
+    foreach my $key (keys %dict) {
+	delete $dict{$key} if (@{$dict{$key}} == 1);
+    }
 };
 
 triggers start => 'solve';
@@ -42,12 +42,7 @@ handle remainder => sub {
     
     return @{$dict{$key}} if exists $dict{$key};
     return;
-
     
-    #foreach my $key (keys %dict) {
-#	print "$key: ", scalar @{$dict{$key}}, "\n";
- #   }
-
 };
 
 zci is_cached => 1;
